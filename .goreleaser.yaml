@@ -51,10 +51,3 @@ changelog:
     exclude:
       - "^docs:"  # Excluding documentation changes
       - "^test:"  # Excluding test-related changes
-
-# Optional: Add checksum and signing configurations to enhance security
-checksum:
-  name_template: 'checksums.txt'
-# Optional: Sign artifacts using a PGP key
-#signs:
-#  artifacts: checksum

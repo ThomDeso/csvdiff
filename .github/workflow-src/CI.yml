@@ -7,6 +7,13 @@ on:
     tags:
       - 'v*'
 
+_defaults_:
+  _container_:
+    image: ghcr.io/wishabi/ci-build-environment:ruby-3.2-bookworm
+    credentials:
+      username: ${{ github.repository_owner }}
+      password: ${{ secrets.GHCR_TOKEN }}
+
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
