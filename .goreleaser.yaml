@@ -8,39 +8,53 @@
 
 version: 1
 
+# Pre-release hooks for cleaning up and preparing the environment
 before:
   hooks:
-    # You may remove this if you don't use go modules.
-#    - go mod tidy
-    # you may remove this if you don't need go generate
-#    - go generate ./...
+    # Ensuring go.mod file is tidy
+    - go mod tidy
+    # Optional: Uncomment if your project requires go generate
+    # - go generate ./...
 
+# Configuration for building the project
 builds:
   - env:
-      - CGO_ENABLED=0
+      - CGO_ENABLED=0  # Disabling CGO for cross-platform compatibility
     goos:
       - linux
       - windows
       - darwin
+    goarch:
+      - amd64  # Targeting amd64 architecture
+    # Optional: Including arm64 architecture for Apple Silicon and others
+    # - arm64
 
+# Archive configuration for packaging the builds
 archives:
   - format: tar.gz
-    # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
+      {{- else if eq .Arch "arm64" }}arm64
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-    # use zip for windows archives
     format_overrides:
       - goos: windows
-        format: zip
+        format: zip  # Using ZIP format for Windows archives
 
+# Changelog configuration to customize release notes
 changelog:
-  sort: asc
+  sort: asc  # Sorting changes in ascending order
   filters:
     exclude:
-      - "^docs:"
-      - "^test:"
+      - "^docs:"  # Excluding documentation changes
+      - "^test:"  # Excluding test-related changes
+
+# Optional: Add checksum and signing configurations to enhance security
+checksum:
+  name_template: 'checksums.txt'
+# Optional: Sign artifacts using a PGP key
+#signs:
+#  artifacts: checksum
